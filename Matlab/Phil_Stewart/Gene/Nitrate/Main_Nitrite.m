@@ -1,0 +1,74 @@
+Set_Para_Nitrite;   % Set the parameter values for simulation
+
+global  Mu_max_O2 Mu_max_NO2 Alpha D_O2 D_NO2 Kg  % global parameters, most of them are dimensionless
+
+global SO2_crit eta; % control parameters for RNA producing kinetics
+
+global dx dt FT FS_interval  flag_kg x1_O x2_O x1_N x2_N x3_N % control parameters
+
+% Open files to save computed data, it is saved every FS_interval time
+% steps
+
+
+fid1 = fopen('./data/W','w');  % file for W, RNA
+
+fid2 = fopen('./data/SO2','w');      % file for oxygen
+
+fid3 = fopen('./data/SNO2','w');   % file for nitrite
+
+w_n = Initial_Nitrite(); 
+
+% Solve for oxygen and nitrite profile once and for all (they don't change
+% with time
+
+S_o2 = Cal_So2_1st(D_O2, x1_O, x2_O,  dx);
+
+S_no2 = Cal_Sno2_1st(D_NO2, x1_N, x2_N, x3_N, 1, dx);
+
+fprintf(fid2, '%12.10e ', S_o2);
+fprintf(fid2, '\n');
+
+fprintf(fid3, '%12.10e ', S_no2);
+fprintf(fid3, '\n');
+
+x = 0:dx:x1_O;
+
+for t_number = 1: FT/dt
+    
+    t_current = t_number*dt;
+    
+    if mod(t_number,FS_interval) == 0
+        
+        fprintf('\n Time = %6.4f, Time steps = %d \n', t_current, t_number);
+        
+    end
+    
+    f_i = exp(-eta*S_o2);
+    
+   
+    pos1 = find(x > x2_N);  %(S_o2 > SO2_crit);
+    pos2 = find(x <= x2_N); %(S_o2 <= SO2_crit);
+    
+    grow = zeros(size(w_n));
+    
+    grow(pos1) = Alpha*Mu_max_O2*f_i(pos1).*S_o2(pos1);
+    grow(pos2) = Alpha*Mu_max_NO2*f_i(pos2).*S_no2(pos2);
+    
+    w_n = (w_n + grow*dt)/(1 + flag_kg*Kg*dt);
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %  Save intermediate results if t_number is a multiple of FS_interval     %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    if mod(t_number,FS_interval) == 0
+        fprintf(fid1, '%12.10e ', w_n);
+        fprintf(fid1, '\n');    
+    end
+    
+end
+
+fclose('all');
+    
+    
+    
+    

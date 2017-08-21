@@ -1,0 +1,4 @@
+cW[4], cW[5], cW[6]
+bW[2], bW[3], bW[4]
+Terms involve Laplacian(phi_b), Double Laplacian(phi_b), Laplacian(phi_s) cause
+fast oscillations in the computation.

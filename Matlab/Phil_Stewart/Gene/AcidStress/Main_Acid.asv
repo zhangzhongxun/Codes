@@ -1,0 +1,103 @@
+clear all;
+
+Set_ParaA;   % Set the parameter values for simulation
+
+%global  Mu_max  Dq Ds Sigma LSc Sc % global parameters, most of them are dimensionless
+
+global  dt FT FS_interval G_s G_p Rho t0 % control parameters
+
+% Open files to save computed data, it is saved every FS_interval time
+% steps
+
+fid1 = fopen('./data/S','w');  % file for S: glucose
+
+fid2 = fopen('./data/P','w');  % file for P: lactate
+
+fid3 = fopen('./data/W','w');  % file for W: gene
+
+fid4 = fopen('./data/u','w');        % file for u: velocity
+
+fid5 = fopen('./data/L','w');        % file for L: biofilm thickness
+
+[L, Wn, P, S, u] = Initial_Acid();
+% Save the initial condition
+
+fprintf(fid1, '%12.10e ', S);
+fprintf(fid1, '\n');
+
+fprintf(fid2, '%12.10e ', P);
+fprintf(fid2, '\n');
+
+fprintf(fid3, '%12.10e ', Wn);
+fprintf(fid3, '\n');
+
+fprintf(fid4, '%12.10e ', u);
+fprintf(fid4, '\n');
+
+fprintf(fid5, '%12.10e ', L);
+fprintf(fid5, '\n');
+
+
+for t_number = 1: FT/dt
+    
+    t_current = t_number*dt;
+    
+    if mod(t_number,FS_interval) == 0
+        
+        fprintf('\n Time = %6.4f, Time steps = %d \n', t_current, t_number);
+        
+    end
+    
+    % calculate the current biofilm growth rate mu
+    
+    mu = mu_growth(P, S);
+    
+    
+    r_S = (L^2)*G_s*mu;
+    
+    S = Solve_SAPD(r_S, L);  % calculate the glucose concentration
+    
+    r_P = (L^2)*G_p*mu;
+    
+    P = Solve_PA(r_P);  % calculate the lactate concentration
+    
+    [L_dot, u] = Velo_growthA(L, mu);
+    
+    fasr = f_asr(P);
+    
+    r_W = Rho*t0*fasr.*mu;
+    
+    [d, e, f, rhs] = Build_WA(r_W, mu, Wn, L_dot, L, u);
+    
+    Wn = Tridiag_Solver(d,e,f, rhs);
+    
+    L = L + L_dot*dt;
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %  Save intermediate results if t_number is a multiple of FS_interval     %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    if mod(t_number,FS_interval) == 0
+      
+        fprintf(fid1, '%12.10e ', S);
+        fprintf(fid1, '\n');
+        
+        fprintf(fid2, '%12.10e ', P);
+        fprintf(fid2, '\n');
+        
+        fprintf(fid3, '%12.10e ', Wn);
+        fprintf(fid3, '\n');
+        
+        fprintf(fid4, '%12.10e ', u);
+        fprintf(fid4, '\n');
+        
+        fprintf(fid5, '%12.10e ', L);
+        fprintf(fid5, '\n');
+        
+    end
+    
+end
+    
+    fclose('all');
+    
+    

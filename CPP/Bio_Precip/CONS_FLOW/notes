@@ -1,0 +1,1 @@
+1. The influent of the dissolved substrance must also have a parabolic profile, (same as the velocity), otherwise the two corners at the outflow boundary will always be zero (since the velocity is zero there and nothing is convected to those two points).

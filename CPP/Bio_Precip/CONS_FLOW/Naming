@@ -1,0 +1,13 @@
+Naming of saving directory
+
+K_2em1_chi_1e17_consD_sq
+
+Kur: 2x10^(-1), \chi_c = 1x10^17, constant diffusion coefficient, square domain, with electric field
+
+K_2em1_chi_1e17_consD_sq_NEP: everything same, but no electric potential
+
+K_2em1_chi_1e17_variD_sq:  variable diffusion coefficient (depend on phi_c)
+
+K_2em1_chi_1e17_consD_1x2: on a 1 by 2 rectangular domain
+
+

@@ -1,0 +1,52 @@
+
+
+***************************** The Raw Global Parameters ******************* 
+
+
+ KB = 1.38065e-23
+ T = 303
+ gam_0 = 6e+06
+ gam_1 = 8e+06
+ gam_2 = 3.0836e+17
+ kai_CH = 0.58
+ np_inv = 0.001
+ phi_reg = 1e-08
+ phis_reg = 1
+ lam_c = 1e-09
+ lam_b = 1e-09
+ lam_s = 1e-09
+ s_eps = 1
+ s_mu = 0.01
+ s_K_c = 0.0001
+ s_A = 0.2
+ ds = 2.3e-11
+ d_ur = 1.38e-09
+ d_nh3 = 2.14e-09
+ d_nh4 = 1.96e-09
+ d_h2co3 = 1.92e-09
+ d_hco3 = 1.18e-09
+ d_co3 = 9.2e-10
+ d_ca = 7.9e-10
+ d_cl = 2.03e-09
+ d_h = 9.31e-09
+ d_oh = 5.28e-09
+ eta_c = 50
+ eta_b = 4
+ eta_s = 0.001002
+ rho_c = 1000
+ rho_b = 1000
+ rho_s = 1000
+ kur = 0.2
+ kp = 0.0008
+ s_crit = 50
+ kacid_1 = 4.467e-07
+ kacid_2 = 4.677e-11
+ k_nh = 1.778e+09
+ k_w = 1e-14
+ k_so = 3.8e-09
+ A_Davies = 0.5
+ B_Davies = 0.24
+ alpha_Davies = 0.1
+ ca_phase = 1e+17
+ ca_vol_coef = 1
+ vol_penal = 0

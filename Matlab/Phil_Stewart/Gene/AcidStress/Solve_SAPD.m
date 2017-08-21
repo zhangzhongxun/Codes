@@ -1,0 +1,97 @@
+% Function to build the system of linear equations from discretizing the
+% equation for s (nutrient), the matrix is tridiagonal with size Nx
+%  no-flux boundary condition at x = 0 and Dirichlet BC at x = 1
+%       
+% Input: p -> lactate concentration at previous time step, vector of length 
+%        L -> biofilm thickness
+
+
+
+% Output: S -> Concentration of nutrient with size Nx+1 
+
+
+function S = Solve_SAPD(p, L)
+
+global  dx  Nx h0 PD G_s mu_max p0 % dx = 1/Nx
+
+x = 0:dx:1;  % the coordinates of spatial grid points in the scaled domain
+x = x';
+x_off = x(1:Nx) + .5*dx; % offset grid points where s is defined
+
+
+dPD = PD/h0;  % dimensionless penetration depth
+
+xp = dPD/L;  % percentage of penetration
+
+if xp >= 1  % glucose fully penetrated the biofilm
+    
+    n = Nx;  % size of the tridiagonal linear system
+    
+    d = zeros(n, 1);
+    e1 = zeros(n, 1);
+    f1 = zeros(n, 1);
+    rhs = zeros(size(d));
+    
+    d(2:n) = -((x_off(1:n-1).^2 + x_off(2:n).^2)./x(2:n).^2)/(dx*dx) - (L^2)*G_s*mu_max*(1 - p(2:n)/(3000/p0));
+    e1(2:n) = (x_off(1:n-1).^2)./(x(2:n).^2)/(dx*dx);
+    f1(2:n) = (x_off(2:n).^2)./(x(2:n).^2)/(dx*dx);
+    
+    %  impose the natural BC at x = 0 (j = 0)
+    d(1) = -6/(dx*dx);
+    f1(1) = 6/(dx*dx);
+    
+    %  impose the Dirichlet BC at x = 1 (j = n)
+    rhs(n) = rhs(n) - f1(n)*1;
+    
+    e = e1(2:n);
+    
+    f = f1(1:n-1);
+    
+    S = Tridiag_Solver(d,e,f, rhs);
+    
+    S = [S; 1];
+    
+elseif xp > 0
+    
+    x1 = 1 - xp;
+    
+    jmin = find(x >= x1, 1); % first index of x with value bigger than x1 
+    j_range = jmin:Nx;
+    
+    n = Nx + 1 - jmin;  % size of the linear system for nutrient without full penetration into the biofilm
+   
+    d = zeros(n, 1);
+    e1 = zeros(n, 1);
+    f1 = zeros(n, 1);
+    rhs = zeros(size(j_range));
+   
+    d(1:n) = -((x_off(j_range-1).^2 + x_off(j_range).^2)./x(j_range).^2)/(dx*dx) - (L^2)*G_s*mu_max*(1 - p(j_range)/(3000/p0));
+    e1(1:n) = (x_off(j_range-1).^2)./(x(j_range).^2)/(dx*dx);
+    f1(1:n) = (x_off(j_range).^2)./(x(j_range).^2)/(dx*dx);
+    
+    %  impose the natural BC at x = x1 (j = jmin)
+    f1(1) = f1(1) + e1(1);
+    
+    %  impose the Dirichlet BC at x = 1 (j = n)
+    rhs(n) = rhs(n) - f1(n)*1;
+    
+    e = e1(2:n);
+    
+    f = f1(1:n-1);
+    
+    S_tmp = Tridiag_Solver(d,e,f, rhs);
+    
+    %S = [zeros(1:jmin-1,1); S_tmp; 1];
+    
+    S = zeros(Nx+1,1);
+    
+    S(jmin:Nx) = S_tmp;
+    
+    S(Nx+1) = 1;
+else
+    fprintf(1,'\n xp = %6.2f\n', xp);
+    display('xp must be positive');
+    
+end
+
+end

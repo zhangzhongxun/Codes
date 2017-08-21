@@ -1,0 +1,6 @@
+1. Turn terms on and off in Build_Slow_Process and see what cause the oscillations at corner
+2. Check the Build_EP_Interior and see what causes the oscillation on the right boundary
+
+--------------------------------------------------------------------------------------------
+Remedies:
+1. In-flow velocity should be a constant (don't increase with time).

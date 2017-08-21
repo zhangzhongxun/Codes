@@ -1,0 +1,41 @@
+
+
+ ************* The non-dimensionalized global parameters are ************* 
+
+ Vol_Penal = -nan
+ Gamma_0 = +inf
+ Ca_phase = +inf
+ Gamma_1 = +inf
+ Gamma_2 = +inf
+ Kai_CH  = +5.7999999999999996e-01
+ Lambda_c  = +0.0000000000000000e+00
+ Lambda_b  = +0.0000000000000000e+00
+ Lambda_s  = +0.0000000000000000e+00
+ Epsilon = +1.0000000000000000e+00
+ sub_mu  = +inf
+ sub_K_c = +inf
+ sub_A   = +inf
+ a_EPU = +0.0000000000000000e+00
+ k_ur   = +inf
+ k_p   = +inf
+ S_crit = +5.0000000000000000e+01
+ k_acid_1 = +4.4670000000000000e-07
+ k_acid_2 = +4.6769999999999997e-11
+ k_nh = +1.7780000000000000e+09
+ k_w = +1.0000000000000000e-14
+ k_so = +3.8000000000000001e-09
+ Ds      = +inf
+ D_ur      = +inf
+ D_nh3  = +inf
+ D_nh4  = +inf
+ D_h2co3  = +inf
+ D_hco3  = +inf
+ D_co3  = +inf
+ D_ca      = +inf
+ D_cl      = +inf
+ eta_cac = +inf
+ eta_bio = +inf
+ eta_sol = +inf
+ rho_cac = +inf
+ rho_bio = +inf
+ rho_sol = +inf

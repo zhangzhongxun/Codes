@@ -1,0 +1,59 @@
+
+
+********************* The Raw Control Parameters ***************************
+
+
+ dx = 0.0078125
+ dy = 0.0078125
+ Nx = 127
+ k  = 6
+ Tfinal = 101
+ CFL = 0.9
+ Newton_tol = 1e-08
+ Newton_max_k = 30
+ Activity_max_k = 30
+ Activity_tol = 1e-06
+ GMRES_tol = 0
+ GMRES_max_k = 32558
+ Init_flag = -523005888
+ BC_flag = 32767
+ velo_flag = 32558
+ Grid_flag = 1672916008
+ Init_N = 1684675258
+ rho_0 = 6.90888e-310
+ c_0 = 0
+ h = 6.95333e-310
+ U_ref = 0
+ L = 6.95333e-310
+ LL = 6.90888e-310
+ Delta_P = 6.90888e-310
+ F_Stride = -523005416
+ Tfac = 6.90888e-310
+ alpha = 9.52875e-315
+ Ini_phc = 6.90888e-310
+ Ini_phb = 0
+ Ini_Ur = 6.90888e-310
+ Ini_NH3 = 6.90888e-310
+ Ini_NH4 = 6.90888e-310
+ Ini_H2CO3 = 6.90888e-310
+ Ini_HCO3 = 6.90888e-310
+ Ini_CO3 = 6.95333e-310
+ Ini_Ca = 2.122e-314
+ Ini_Cl = 6.90888e-310
+ Ini_H = 6.95333e-310
+ Ini_OH = 2.96439e-323
+ Ini_c = 2.10927e-314
+ cutoff_c_time = 6.90888e-310
+ Shear_velocity = 6.95333e-310
+ D_flag = -523005760
+ D_phic_tol = 6.95333e-310
+ D_delta = 3.29573e-316
+ a_epu = 1.08694e-322
+ EP_flag = 0
+ eps_dif = 6.90888e-310
+ N_dif_steps = 32767
+ Diffusion const of Initial = 32767
+ Ion_Act_flag = 1686727312
+ Save directory = 
+ chemc_flag = 0
+ Ave_viscosity_flag = -916992247

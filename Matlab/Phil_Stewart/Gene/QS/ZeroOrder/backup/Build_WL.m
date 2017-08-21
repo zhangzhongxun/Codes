@@ -1,0 +1,66 @@
+% Function to build the system of linear equations from discretizing the
+% equation for W_lasR, the matrix is tridiagonal with size Nx
+%  no-flux boundary condition at x = 0 and x = 1
+
+% Input: L -> current biofilm thickness (scalar)
+%        L_dot -> the time derivative of current biofilm thickness (scalar)
+%        S -> substrate concentration (vector of length Nx) at current time
+%             step
+%        WLn -> Concentration of lsaI at time step n
+%        WRn -> Concentration of rsaL at time step n
+%        Qn  -> QS molecule concentratin at time step n
+%        u  -> velocity due to growth, vector of length Nx+1 (onsite grid)
+
+
+% Output: d -> the main diagonal of the matrix (vector of length Nx)
+%         e -> the subdiagonal of the matrix (vector of length Nx - 1)
+%         f -> the superdiagonal of the matrix (vector of length Nx - 1)
+%         rhs -> the right hand side of the linear system (vector of length
+%         Nx)
+
+
+function [d,e,f,rhs] = Build_WL(L, L_dot, S, WLn, WRn, Qn, u)
+
+global  Alpha_2 Mu_max dx dt Nx Sc Kg_WL flag_kg_WL  max_rate_WL Q_bar g_l % dx = 1/Nx
+
+x = 0:dx:1;  % the coordinates of spatial grid points in the scaled domain
+
+n = Nx;  % size of the tridiagonal linear system
+
+d = zeros(n, 1);
+e1 = zeros(n, 1);
+f1 = zeros(n, 1);
+rhs = zeros(n,1);
+
+
+s_u = (S > Sc);  % only has protein production when S > S_c, zero order kinetics
+
+
+    for j = 2:n-1
+        
+        
+        d(j) = 1 + flag_kg_WL*Kg_WL*dt + (.5*dt/dx)*(u(j+1) - u(j));  % the main diagonal
+        
+        e1(j) =  - .5*dt*u(j)/dx + 0.5*(dt/dx)*(x(j) + .5*dx)*(L_dot/L); % the subdiagonal
+        
+        f1(j) =  .5*dt*u(j+1)/dx - 0.5*(dt/dx)*(x(j) + .5*dx)*(L_dot/L); % the superdiagonal
+
+        rhs(j) = WLn(j) + dt*exp(-Alpha_2*WRn(j))*f_lasI(Qn(j), max_rate_WL, Q_bar)*g_l*Mu_max*s_u(j);
+        
+    end
+    
+    d(1) = 1 + dt*Mu_max*s_u(1) + flag_kg_WL*Kg_WL*dt;
+    rhs(1) = WLn(1) + dt*exp(-Alpha_2*WRn(1))*f_lasI(Qn(1), max_rate_WL, Q_bar)*g_l*Mu_max*s_u(1);
+    
+    d(n) = 1 + dt*Mu_max*s_u(n) + flag_kg_WL*Kg_WL*dt;
+    rhs(n) = WLn(n) + dt*exp(-Alpha_2*WRn(n))*f_lasI(Qn(n), max_rate_WL, Q_bar)*g_l*Mu_max*s_u(n);
+        
+
+e = e1(2:n);
+
+f = f1(1:n-1);
+
+end
+
+
+
